@@ -1,0 +1,28 @@
+---
+- name: Install Nginx on AWS
+  hosts: aws
+  become: yes
+  
+  tasks:
+    - name: Install nginx
+      dnf:
+        name: nginx
+        state: present
+    
+    - name: Configure nginx to port 8080
+      lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: 'listen       80;'
+        line: '        listen       8080;'
+        backup: yes
+    
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    
+    - name: Show message
+      debug:
+        msg: "Nginx installed and running on port 8080!"
+
