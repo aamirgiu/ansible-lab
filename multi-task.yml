@@ -1,0 +1,54 @@
+---
+- name: Multiple Tasks Demo
+  hosts: aws
+  become: yes
+  
+  tasks:
+    # Task 1: Docker Install Karo
+    - name: Install Docker
+      dnf:
+        name: docker
+        state: present
+    
+    # Task 2: Docker Start Karo
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    
+    # Task 3: Naya User Banao
+    - name: Create new user
+      user:
+        name: devopsuser
+        state: present
+        shell: /bin/bash
+    
+    # Task 4: Git Install Karo
+    - name: Install Git
+      dnf:
+        name: git
+        state: present
+    
+    # Task 5: Directory Banao
+    - name: Create app directory
+      file:
+        path: /opt/myapp
+        state: directory
+        mode: '0755'
+    
+    # Task 6: Git Clone Karo
+    - name: Clone repository
+      git:
+        repo: https://github.com/aamirgiu/docker-compose-lab.git
+        dest: /opt/myapp
+        version: main
+    
+    # Task 7: Message Dikhao
+    - name: Show completion message
+      debug:
+        msg: "All tasks completed successfully!"
+
+
+
+
