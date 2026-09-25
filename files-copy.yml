@@ -1,0 +1,40 @@
+---
+- name: Files and Templates Demo
+  hosts: aws
+  become: yes
+  
+  tasks:
+    # Task 1: Simple File Copy
+    - name: Copy index.html to AWS
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head><title>Ansible Deployed</title></head>
+          <body>
+              <h1>Deployed via Ansible!</h1>
+              <p>Ye file Ansible ne copy ki hai</p>
+              <p>Server: AWS EC2</p>
+          </body>
+          </html>
+        dest: /opt/myapp/html/ansible-page.html
+        mode: '0644'
+    
+    # Task 2: Directory Banao
+    - name: Create config directory
+      file:
+        path: /opt/myapp/config
+        state: directory
+        mode: '0755'
+    
+    # Task 3: Template File Banao
+    - name: Create template file
+      template:
+        src: app-config.j2
+        dest: /opt/myapp/config/app.conf
+        mode: '0644'
+    
+    # Task 4: Message
+    - name: Show success
+      debug:
+        msg: "Files copied and templates deployed!"
